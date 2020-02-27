@@ -1,0 +1,6 @@
+[Unit]
+Description=Change the background
+
+[Service]
+Type=oneshot
+ExecStart=%h/.config/systemd/user/backgroundchange
