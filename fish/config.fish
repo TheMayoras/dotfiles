@@ -7,6 +7,22 @@ setenv FZF_DEFAULT_OPTS '--height 20%'
 abbr -a nv 'nvim'
 abbr -a vim 'nvim'
 
+# run last command
+alias !!='commandline -i "$history[1]";history delete --exact --case-sensitive doh'
+
+# run last command starting with arg
+function h
+	set result (history search --prefix "$argv[1]" --max 1)
+	if test -n "$result"
+		commandline -i $result
+	else
+		set_color red
+		echo "!! Nothing found !!" 
+		set_color normal
+	end
+	history delete --exact --case-sensitive doh;
+end
+
 # Replace ls with exa
 if command -v exa > /dev/null
 	abbr -a l 'exa'

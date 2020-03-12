@@ -1,5 +1,4 @@
 #!/bin/bash
-
 feh --bg-center --randomize /home/bmay/Pictures/wallpaper/*
 
 echo "Changed Background: $(date +"%m-%d-%Y %H:%M")" >> /home/bmay/logs/background-service.log
