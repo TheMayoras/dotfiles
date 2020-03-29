@@ -1,3 +1,7 @@
+# set the path to include cargo
+set PATH -g ~/.cargo/bin $PATH
+
+
 setenv FZF_DEFAULT_COMMAND 'fd --type file --follow'
 setenv FZF_CTRL_T_COMMAND 'fd --type file --follow'
 setenv FZF_DEFAULT_OPTS '--height 20%'
@@ -5,6 +9,7 @@ setenv FZF_DEFAULT_OPTS '--height 20%'
 # ====== Abbreviations ==============
 # mkcd becomes mkdir and cd
 abbr -a nv 'nvim'
+abbr -a nvm 'nvim'
 abbr -a vim 'nvim'
 
 # run last command
@@ -12,9 +17,10 @@ alias !!='commandline -i "$history[1]";history delete --exact --case-sensitive d
 
 # run last command starting with arg
 function h
-	set result (history search --prefix "$argv[1]" --max 1)
+	set args (echo $argv)
+	set result (history search --prefix "$args" -n 1)
 	if test -n "$result"
-		commandline -i $result
+		commandline -i $result[1]
 	else
 		set_color red
 		echo "!! Nothing found !!" 
