@@ -431,8 +431,10 @@ vnoremap <leader>s} <esc>`<i{<esc>`>la}<esc>
 " manual folds for vim files
 augroup vimrc
         autocmd!
-        au FileType,BufRead,BufNewFile,BufAdd vim setlocal foldmethod=marker
-        au BufWritePost .vimrc,init.vim source $MYVIMRC
+        au BufWritePost .vimrc,init.vim 
+                \ source $MYVIMRC | 
+                \ setlocal foldmethod=marker |
+                \ set foldlevel=2
 augroup end
 
 " set tab width for assembly
