@@ -410,10 +410,6 @@ vnoremap _ Dp
 " Better uppercase stuff
 inoremap <C-u> <esc>gUiwea
 
-" Source and edit MYVIMRC
-nnoremap <leader>svm :source $MYVIMRC<CR>
-nnoremap <leader>evm :vsplit $MYVIMRC<CR>
-
 " Surround in stuff
 vnoremap <leader>s" <esc>`<i"<esc>`>la"<esc>
 vnoremap <leader>s' <esc>`<i'<esc>`>la'<esc>
@@ -429,13 +425,14 @@ vnoremap <leader>s} <esc>`<i{<esc>`>la}<esc>
 " ================================================================================================
 
 " ================================================================================================
-" Auto Commands and Commands {{{
+" Auto Commands {{{
 " ================================================================================================
 
 " manual folds for vim files
-augroup vimmarker
+augroup vimrc
         autocmd!
         au FileType,BufRead,BufNewFile,BufAdd vim setlocal foldmethod=marker
+        au BufWritePost .vimrc,init.vim source $MYVIMRC
 augroup end
 
 " set tab width for assembly
@@ -454,6 +451,16 @@ if s:has_plugin('rainbow_parentheses.vim')
         au Syntax * RainbowParenthesesLoadSquare
         au Syntax * RainbowParenthesesLoadBraces
 endif
+
+" ================================================================================================
+" }}}
+" ================================================================================================
+
+" ================================================================================================
+" Commands {{{
+" ================================================================================================
+
+
 
 " ================================================================================================
 " }}}
