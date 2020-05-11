@@ -30,6 +30,9 @@ call plug#begin()
 	Plug 'nightsense/vimspectr'
 	Plug 'drewtempelmeyer/palenight.vim'
         Plug 'limadm/vim-blues'
+        Plug 'tjammer/blayu.vim'
+        Plug 'petelewis/vim-evolution'
+        Plug 'reedes/vim-colors-pencil'
 
 	" =======================================================================
         "                             Language Client
@@ -47,6 +50,7 @@ call plug#begin()
 	Plug 'dag/vim-fish'
 
 call plug#end()
+filetype on
 
 " ================================================================================================
 " }}}
@@ -94,16 +98,17 @@ set foldmethod=indent " we usually want to fold by indent
 set nowrap            " don't wrap lines
 set nojoinspaces      " I don't need two spaces after '.', '?', or '!'
 set lazyredraw        " I don't need to see changes from macros until its done (helps with speed)
-let mapleader=","
+let mapleader=","     " A good leader key
 set expandtab         " makes tabs into spaces
 set timeoutlen=1500   " give me a bit longer when typing stuff like '<leader>w'
-set colorcolumn=150   " give me a color column (ugly but effective)
+set colorcolumn=100   " give me a color column (ugly but effective)
 
 " default splits to right or bottom
 set splitright
 set splitbelow
 
 set shortmess+=c      " don't give |ins-completion-menu| messages.
+
 set diffopt+=iwhite   " No whitespace in vimdiff
 
 " I want to load indent and plugin settings for filetypes
@@ -121,6 +126,11 @@ syntax on  " who doesn't want syntax highlighting?
 let g:python_host_prog='/usr/bin/python2'
 let g:python3_host_prog='/usr/bin/python3'
 
+set cmdheight=2
+set updatetime=500
+
+set noshowmode
+
 " ================================================================================================
 " }}}
 " ================================================================================================
@@ -129,23 +139,6 @@ let g:python3_host_prog='/usr/bin/python3'
 " Misc {{{
 " ================================================================================================
 
-" Rainbow brackets and braces
-let g:rbpt_colorpairs = [
-    \ ['Darkblue',    'SeaGreen3'],
-    \ ['darkgray',    'DarkOrchid3'],
-    \ ['darkgreen',   'LightPink2'],
-    \ ['darkcyan',    'LavenderBlush1'],
-    \ ['darkred',     'MintCream'],
-    \ ['darkmagenta', 'DarkOrchid3'],
-    \ ['brown',       'LightPink2'],
-    \ ['gray',        'RoyalBlue3'],
-    \ ['black',       'SeaGreen3'],
-    \ ['darkmagenta', 'DarkOrchid3'],
-    \ ['Darkblue',    'aquamarine2'],
-    \ ['darkgreen',   'RoyalBlue3'],
-    \ ['darkcyan',    'SeaGreen3'],
-    \ ['red',         'RoyalBlue2'],
-    \ ]
 
 " Plugin settings
 let g:secure_modelines_allowed_items = [
@@ -161,7 +154,7 @@ let g:secure_modelines_allowed_items = [
                 \ "colorcolumn"
                 \ ]
 
- if (match($TERM, "screen-256color") == -1)
+ if (match($TERM, "screen-256color") == -1 && match($TERM, 'screen') == -1)
          " screen does not (yet) support truecolor
          set termguicolors
  endif
@@ -174,7 +167,9 @@ let g:secure_modelines_allowed_items = [
 " Colorscheme {{{
 " ================================================================================================
 
-if s:has_plugin('vim-blues')
+if s:has_plugin('vim-colors-pencil')
+        colorscheme pencil
+elseif s:has_plugin('vim-blues')
         colorscheme blues
 elseif s:has_plugin('palenight.vim')
 	colorscheme palenight
@@ -192,6 +187,24 @@ endif
 " Plugin Settings {{{
 " ================================================================================================
 
+" Rainbow bracket colors
+let g:rbpt_colorpairs = [
+    \ ['Darkblue',    'SeaGreen3'],
+    \ ['darkgray',    'DarkOrchid3'],
+    \ ['darkgreen',   'LightPink2'],
+    \ ['darkcyan',    'LavenderBlush1'],
+    \ ['darkred',     'MintCream'],
+    \ ['darkmagenta', 'DarkOrchid3'],
+    \ ['brown',       'LightPink2'],
+    \ ['gray',        'RoyalBlue3'],
+    \ ['black',       'SeaGreen3'],
+    \ ['darkmagenta', 'DarkOrchid3'],
+    \ ['Darkblue',    'aquamarine2'],
+    \ ['darkgreen',   'RoyalBlue3'],
+    \ ['darkcyan',    'SeaGreen3'],
+    \ ['red',         'RoyalBlue2'],
+    \ ]
+
 " Language Server Stuff
 let g:LanguageClient_serverCommands = {
 	\ 'rust': [ 'rustup', 'run', 'stable', 'rls' ],
@@ -201,15 +214,13 @@ let g:LanguageClient_serverCommands = {
 " Automatically start language servers.
 let g:LanguageClient_autoStart=1
 let g:deoplete#enable_at_startup=1
-set cmdheight=2
-set updatetime=500
 
 " ==========================
 "         LIGHTLINE
 " ==========================
 let g:lightline = {
 	\ 'component': {
-	\   'lineinfo': '⭡ %3l:%-2v',
+	\   'lineinfo': ' %3l:%-2v',
 	\ },
 	\ 'component_function': {
 	\   'readonly': 'LightlineReadonly',
@@ -220,10 +231,9 @@ let g:lightline = {
 	\     'left': [ [ 'mode', 'paste' ],
 	\             [ 'fugitive', 'git-status', 'filename', 'modified', 'readonly' ] ]
 	\ },
-	\ 'separator': { 'left': '⮀', 'right': '⮂' },
-	\ 'subseparator': { 'left': '⮁', 'right': '⮃' },
+	\ 'subseparator': { 'left': '>', 'right': '<' },
         \ 'colorscheme': 'deus',
-	\ }
+\ }
 
 
 function! LightlineReadonly()
@@ -233,7 +243,7 @@ endfunction
 function! LightlineFugitive()
 	if exists('*fugitive#head()')
 		let branch = fugitive#head()
-		return branch !=# '' ? '⭠ '.branch : ''
+		return branch !=# '🚆' ? ''.branch : ''
 	endif
 	return ''
 endfunction
@@ -241,7 +251,6 @@ endfunction
 function! LightlineFilename()
 	return expand('%:t') !=# '' ? @% : '[NoName]'
 endfunction
-set noshowmode
 
 " ==========================
 " VIM ROOTER and FZF
@@ -320,7 +329,6 @@ let g:rustfmt_emit_files = 1
 let g:furstfmt_fail_silently = 0
 let g:rust_clip_command = 'xclip -selection clipboard'
 let $RUST_SRC_PATH = systemlist("rustc --print sysroot")[0] . "/lib/rustlib/src/rust/src"
-autocmd BufReadPost *.rs setlocal filetype=rust
 
 " ================================================================================================
 " }}}
@@ -379,7 +387,8 @@ vnoremap j gj
 vnoremap k gk
 
 " split the current line at the cursor
-nnoremap <C-p> i<CR><ESC>
+nnoremap <M-j> i<CR><ESC>
+nnoremap <M-k> i<CR><ESC>"-ddk"-P
 
 " FZF hotkeys
 nnoremap <leader>f :Files<CR>
@@ -410,6 +419,14 @@ vnoremap _ Dp
 " Better uppercase stuff
 inoremap <C-u> <esc>gUiwea
 
+" Motions for inside brackets, parens, etc
+onoremap ( i(
+onoremap ) i(
+onoremap [ i[
+onoremap ] i[
+onoremap { i{
+onoremap } i{
+
 " Surround in stuff
 vnoremap <leader>s" <esc>`<i"<esc>`>la"<esc>
 vnoremap <leader>s' <esc>`<i'<esc>`>la'<esc>
@@ -430,15 +447,14 @@ vnoremap <leader>s} <esc>`<i{<esc>`>la}<esc>
 
 " manual folds for vim files
 augroup vimrc
-        autocmd!
-        au BufWritePost .vimrc,init.vim 
-                \ source $MYVIMRC | 
-                \ setlocal foldmethod=marker |
-                \ set foldlevel=2
-augroup end
+autocmd!
+au BufAdd,BufRead .vimrc,init.vim 
+        \ setlocal foldmethod=marker | 
+        \ setlocal foldlevel=0
 
 " set tab width for assembly
 augroup assembly
+        autocmd!
         au Filetype nasm setlocal tabstop=4
         au Filetype nasm setlocal shiftwidth=4
         au Filetype asm  setlocal tabstop=4
@@ -448,11 +464,19 @@ augroup end
 
 " Rainbow brackets stuff
 if s:has_plugin('rainbow_parentheses.vim')
-        au VimEnter * RainbowParenthesesActivate
-        au Syntax * RainbowParenthesesLoadRound
-        au Syntax * RainbowParenthesesLoadSquare
-        au Syntax * RainbowParenthesesLoadBraces
+augroup rainbow_parentheses
+        autocmd!
+        au VimEnter,BufAdd,BufNewFile * RainbowParenthesesActivate
+        au VimEnter,BufAdd,BufNewFile * RainbowParenthesesLoadRound
+        au VimEnter,BufAdd,BufNewFile * RainbowParenthesesLoadSquare
+        au VimEnter,BufAdd,BufNewFile * RainbowParenthesesLoadBraces
+augroup end
 endif
+
+augroup rust
+autocmd!
+autocmd FileType *.rs setlocal filetype=rust
+augroup end
 
 " ================================================================================================
 " }}}
