@@ -139,7 +139,6 @@ set noshowmode
 " Misc {{{
 " ================================================================================================
 
-
 " Plugin settings
 let g:secure_modelines_allowed_items = [
                 \ "textwidth",   "tw",
@@ -154,9 +153,10 @@ let g:secure_modelines_allowed_items = [
                 \ "colorcolumn"
                 \ ]
 
- if (match($TERM, "screen-256color") == -1 && match($TERM, 'screen') == -1)
-         " screen does not (yet) support truecolor
+" can we use termguicolors
+ if match($TERM, "screen-256color") == 0 
          set termguicolors
+         let t_Co=256
  endif
 
 " ================================================================================================
@@ -166,18 +166,18 @@ let g:secure_modelines_allowed_items = [
 " ================================================================================================
 " Colorscheme {{{
 " ================================================================================================
-
-if s:has_plugin('vim-colors-pencil')
-        colorscheme pencil
-elseif s:has_plugin('vim-blues')
-        colorscheme blues
-elseif s:has_plugin('palenight.vim')
-	colorscheme palenight
-elseif s:has_plugin('vimspectr')
-	colorscheme vimspectr210-dark
-else
-        colorscheme desert
-endif
+colorscheme base16-blueish
+" if s:has_plugin('vim-colors-pencil')
+"         colorscheme pencil
+" elseif s:has_plugin('vim-blues')
+"         colorscheme blues
+" elseif s:has_plugin('palenight.vim')
+" 	colorscheme palenight
+" elseif s:has_plugin('vimspectr')
+" 	colorscheme vimspectr210-dark
+" else
+"         colorscheme desert
+" endif
 
 " ================================================================================================
 " }}}
@@ -232,7 +232,7 @@ let g:lightline = {
 	\             [ 'fugitive', 'git-status', 'filename', 'modified', 'readonly' ] ]
 	\ },
 	\ 'subseparator': { 'left': '>', 'right': '<' },
-        \ 'colorscheme': 'deus',
+        \ 'colorscheme': 'OldHope',
 \ }
 
 
