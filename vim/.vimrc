@@ -438,6 +438,10 @@ inoremap kk <ESC>ki
 " FZF hotkeys
 nnoremap <leader>f :Files<CR>
 nnoremap <leader>b :Buffers<CR>
+nnoremap <leader>r :Rg<CR>
+nnoremap <leader>l :BLines!<CR>
+nnoremap <leader>h :History<CR>
+nnoremap <leader>c :History:<CR>
 
 " Handy stuff
 nnoremap <leader>w :w<CR>
@@ -553,7 +557,7 @@ augroup end
 " Commands {{{
 " ================================================================================================
 
-
+command! -nargs=0 Format call CocAction('format')
 
 " ================================================================================================
 " }}}
