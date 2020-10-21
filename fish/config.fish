@@ -8,7 +8,6 @@ setenv FZF_DEFAULT_OPTS '--height 20%'
 # ====== Abbreviations ==============
 # mkcd becomes mkdir and cd
 abbr -a nv 'nvim'
-abbr -a nvm 'nvim'
 abbr -a vim 'nvim'
 
 # run last command
