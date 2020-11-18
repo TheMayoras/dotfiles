@@ -76,13 +76,36 @@
         "scala",
         "sbt"
       ]
-    }, 
-  "haskell": {
-    "command": "haskell-language-server-wrapper",
-    "args": ["--lsp"],
-    "rootPatterns": ["*.cabal", "stack.yaml", "cabal.project", "package.yaml", "hie.yaml"],
-    "filetypes": ["haskell", "lhaskell"]
-  }
+    },
+    "haskell": {
+      "command": "haskell-language-server-wrapper",
+      "args": [
+        "--lsp"
+      ],
+      "rootPatterns": [
+        "*.cabal",
+        "stack.yaml",
+        "cabal.project",
+        "package.yaml",
+        "hie.yaml"
+      ],
+      "filetypes": [
+        "haskell",
+        "lhaskell"
+      ]
+    }
   },
-  "python.setInterpreter": "/usr/bin/python3"
+  "tsserver.enableJavascript": true,
+  "python.setInterpreter": "/usr/bin/python3",
+  "coc.preferences.formatOnSaveFiletypes": [
+    "javascript",
+    "typescript",
+    "html",
+    "json",
+    "jsonc",
+    "css",
+    "scss",
+    "python",
+    "python3"
+  ]
 }
