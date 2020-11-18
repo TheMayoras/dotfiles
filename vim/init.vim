@@ -10,15 +10,12 @@ Plug 'itchyny/lightline.vim'
 Plug 'machakann/vim-highlightedyank'
 Plug 'andymass/vim-matchup'
 Plug 'godlygeek/tabular'
-Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemovePlugins' }
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 Plug 'airblade/vim-rooter'
 Plug 'tpope/vim-fugitive', {  'tag': 'v2.3' }
 Plug 'kshenoy/vim-signature'
 Plug 'airblade/vim-gitgutter'
-Plug 'scrooloose/nerdtree'
-Plug 'vim-scripts/TaskList.vim'
 Plug 'simnalamburt/vim-mundo' " History Tree Viewer
 
 "Color Schemes
@@ -34,10 +31,6 @@ Plug 'rust-lang/rust.vim'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'dense-analysis/ale'
 Plug 'sheerun/vim-polyglot' " JS + extra
-
- " LaTeX support
-Plug 'lervag/vimtex'
-Plug 'mhinz/neovim-remote' " is required for callbacks to work with neovim
 
 Plug 'cespare/vim-toml'
 Plug 'stephpy/vim-yaml'
@@ -76,9 +69,6 @@ set shortmess+=c " don't give |ins-completion-menu| messages.
 set diffopt+=iwhite " No whitespace in vimdiff
 
 filetype plugin indent on
-
-" for 'nvr' and latex
-let g:vimtex_compile_progname='nvr'
 
 " Allow undoing after closing
 set undodir=~/.vimdid
@@ -119,7 +109,7 @@ let g:secure_modelines_allowed_items = [
  endif
 
 " color scheme
-colorscheme vimspectr210-dark
+colorscheme OceanicNext
 
 hi Normal ctermbg=NONE
 " Language Server Stuff
@@ -139,7 +129,7 @@ set updatetime=500
 
 let g:lightline = {
 	\ 'component': {
-	\   'lineinfo': '⭡ %3l:%-2v',
+	\   'lineinfo': ' %3l:%-2v',
 	\ },
 	\ 'component_function': {
 	\   'readonly': 'LightlineReadonly',
@@ -150,16 +140,16 @@ let g:lightline = {
 	\     'left': [ [ 'mode', 'paste' ],
 	\             [ 'fugitive', 'git-status', 'filename', 'modified', 'readonly' ] ]
 	\ },
-	\ 'separator': { 'left': '⮀', 'right': '⮂' },
-	\ 'subseparator': { 'left': '⮁', 'right': '⮃' }
+	\ 'separator': { 'left': '', 'right': '' },
+	\ 'subseparator': { 'left': '', 'right': '' }
 	\ }
 function! LightlineReadonly()
-	return &readonly ? '' : ''
+	return &readonly ? 'R' : ''
 endfunction
 function! LightlineFugitive()
 	if exists('*fugitive#head()')
 		let branch = fugitive#head()
-		return branch !=# '' ? '⭠ '.branch : ''
+		return branch !=# '' ? ' '.branch : ''
 	endif
 	return ''
 endfunction

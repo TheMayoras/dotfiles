@@ -1,5 +1,6 @@
 # set the path to include cargo
-set PATH -g ~/.cargo/bin $PATH
+set -U fish_user_paths $HOME/.cargo/bin $PATH
+set -U fish_user_paths $HOME/.ghcup/bin $PATH
 
 
 setenv FZF_DEFAULT_COMMAND 'fd --type file --follow'
@@ -14,6 +15,8 @@ abbr -a vim 'nvim'
 
 # run last command
 alias !!='commandline -i "$history[1]";history delete --exact --case-sensitive doh'
+
+alias fd=fdfind
 
 # run last command starting with arg
 function h
@@ -32,7 +35,7 @@ end
 # Replace ls with exa
 if command -v exa > /dev/null
 	abbr -a l 'exa'
-	abbr -a ls 'exa'
+	abbr -a ls 'exa -al'
 	abbr -a ll 'exa -l'
 	abbr -a lll 'exa -la'
 	abbr -a lr  'exa -R'
