@@ -1,13 +1,11 @@
-filetype off
-" set rtp+=~/dev/Software/Rust/base16-builder-rust/templates/vim
-
 " ================================================================================================
 " Plugins {{{
 " ================================================================================================
+filetype off
 call plug#begin()
 
 	" =======================================================================
-        "     Vim related things (file tree browser, tab stuff, etc.)
+        "     Vim related things (file tree browser, tab stuff, etc.) {{{
 	" =======================================================================
 	Plug 'itchyny/lightline.vim'
 	Plug 'machakann/vim-highlightedyank'
@@ -19,13 +17,17 @@ call plug#begin()
 	Plug 'tpope/vim-fugitive', {  'tag': 'v2.3' }
 	Plug 'kshenoy/vim-signature'
 	Plug 'airblade/vim-gitgutter'
-	Plug 'scrooloose/nerdtree'
 	Plug 'vim-scripts/TaskList.vim'
 	Plug 'simnalamburt/vim-mundo' " History Tree Viewer
+        Plug 'justinmk/vim-dirvish'
         Plug 'kien/rainbow_parentheses.vim'  
+        Plug 'tpope/vim-obsession'
+	" =======================================================================
+	" }}}                              
+	" =======================================================================
 
 	" =======================================================================
-	"                                Color Schemes
+	"                                Color Schemes {{{
 	" =======================================================================
 	Plug 'nightsense/vimspectr'
 	Plug 'drewtempelmeyer/palenight.vim'
@@ -33,9 +35,12 @@ call plug#begin()
         Plug 'tjammer/blayu.vim'
         Plug 'petelewis/vim-evolution'
         Plug 'reedes/vim-colors-pencil'
+	" =======================================================================
+	" }}}                              
+	" =======================================================================
 
 	" =======================================================================
-        "                             Language Client
+        "                             Language Client {{{
 	" =======================================================================
 	Plug 'autozimu/LanguageClient-neovim', {
 		\ 'do': 'bash install.sh',
@@ -44,10 +49,14 @@ call plug#begin()
 	Plug 'rust-lang/rust.vim'
 	Plug 'neoclide/coc.nvim', {'branch': 'release'}
 	Plug 'dense-analysis/ale'
-"	Plug 'sheerun/vim-polyglot' " JS + extra
 	Plug 'cespare/vim-toml'
 	Plug 'stephpy/vim-yaml'
 	Plug 'dag/vim-fish'
+        Plug 'pangloss/vim-javascript'
+        Plug 'leafgarland/typescript-vim'
+	" =======================================================================
+	" }}}                              
+	" =======================================================================
 
 call plug#end()
 filetype on
@@ -92,7 +101,6 @@ set wrapscan          " searching wraps around to beginning of file
 set autoindent        " use indent from previous when pressing Enter
 set encoding=utf-8    " who needs ascii?
 set scrolloff=2       " give me two lines between the screen and the top
-set hidden            " hide buffers don't close them
 set foldenable        " autofold when opening files
 set foldmethod=indent " we usually want to fold by indent
 set nowrap            " don't wrap lines
@@ -100,19 +108,16 @@ set nojoinspaces      " I don't need two spaces after '.', '?', or '!'
 set lazyredraw        " I don't need to see changes from macros until its done (helps with speed)
 let mapleader=","     " A good leader key
 set expandtab         " makes tabs into spaces
-set timeoutlen=1500   " give me a bit longer when typing stuff like '<leader>w'
+set timeoutlen=1000   " give me a bit longer when typing stuff like '<leader>w'
 set colorcolumn=100   " give me a color column (ugly but effective)
+set sidescroll=1      " who doesn't want the editor to scroll to the side?
 
 " default splits to right or bottom
 set splitright
 set splitbelow
 
 set shortmess+=c      " don't give |ins-completion-menu| messages.
-
 set diffopt+=iwhite   " No whitespace in vimdiff
-
-" I want to load indent and plugin settings for filetypes
-filetype plugin indent on 
 
 " Allow undoing after closing
 set undodir=~/.vimdid
@@ -130,6 +135,10 @@ set cmdheight=2
 set updatetime=500
 
 set noshowmode
+
+
+" netrw tree mode
+let g:netrw_liststyle= 3
 
 " ================================================================================================
 " }}}
@@ -152,6 +161,7 @@ let g:secure_modelines_allowed_items = [
                 \ "rightleft",   "rl",   "norightleft", "norl",
                 \ "colorcolumn"
                 \ ]
+
 
 " can we use termguicolors
  if match($TERM, "screen-256color") == 0 
@@ -204,6 +214,8 @@ let g:rbpt_colorpairs = [
     \ ['darkcyan',    'SeaGreen3'],
     \ ['red',         'RoyalBlue2'],
     \ ]
+
+let g:rbpt_max = 8
 
 " Language Server Stuff
 let g:LanguageClient_serverCommands = {
@@ -258,9 +270,10 @@ endfunction
 let g:fzf_layout = { 'down': '~20%' }
 
 function! s:list_cmd()
-  let base = fnamemodify(expand('%'), ':h:.:S')
-  echom "Base: " . base
-  return base == '.' ? 'fd --type file --follow' : printf('fd --type file --follow | proximity-sort %s', shellescape(expand('%')))
+  "let base = fnamemodify(expand('%'), ':h:.:S')
+  "echom "Base: " . base
+  "return base == '.' ? 'fd --type file --follow' : printf('fd --type file --follow | proximity-sort %s', shellescape(expand('%')))
+  return 'fd --type file --follow'
 endfunction
 
 command! -bang -nargs=? -complete=dir Files
@@ -274,9 +287,10 @@ command! -bang -nargs=* Rg
   \           : fzf#vim#with_preview('right:50%:hidden', '?'),
   \   <bang>0)
 
+
 " ========================
 " COMPLETION
-" =======================
+" ========================
 " Use tab for trigger completion with characters ahead and navigate.
 " Use command ':verbose imap <tab>' to make sure tab is not mapped by other plugin.
 inoremap <silent><expr> <TAB>
@@ -294,6 +308,9 @@ endfunction
 " Use <c-.> to trigger completion.
 inoremap <silent><expr> <c-.> coc#refresh()
 
+" Use <c-space> to trigger completion.
+inoremap <silent><expr> <c-space> coc#refresh()
+
 " Use <cr> to confirm completion, `<C-g>u` means break undo chain at current position.
 " Coc only does snippet and additional edit on confirm.
 " inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
@@ -305,15 +322,40 @@ nmap <silent> gl <Plug>(coc-diagnostic-info)
 nmap <silent> gy <Plug>(coc-type-definition)
 nmap <silent> gi <Plug>(coc-implementation)
 nmap <silent> gr <Plug>(coc-references)
-nmap <silent> gd :call LanguageClient#textDocument_definition()<CR>
+nmap <silent> gd <Plug>(coc-definition)
 nmap <silent> gc <Plug>(coc-refactor)
-noremap <silent> K :call LanguageClient#textDocument_hover()<CR>
-nnoremap <silent> <F2> :call LanguageClient#textDocument_rename()<CR>
+nmap <silent> gf :<C-u>CocFix<CR>
+nmap <silent> <F2> <Plug>(coc-rename)
+
+nnoremap <silent> K :call <SID>show_documentation()<CR>
+function! s:show_documentation() 
+        if (index(['vim','help'],&filetype) >= 0)
+                execute 'h'.expand('<cword>')
+        else
+                call CocAction('doHover')
+        endif
+endfunction
 
 
 " Disable ALE auto completion
-let g:ale_completion_enabled=0
+let g:ale_completion_enabled = 0
 let g:ale_set_highlights = 0
+
+" javascript 
+let g:javascript_plugin_jsdoc = 1
+let g:javascript_plugin_ngdoc = 1
+
+" Vim-Dirvish
+let g:dirvish_mode = 2
+let g:loaded_netrwPlugin = 1
+command! -nargs=? -complete=dir Explore Dirvish <args> " Replace the netrw commands with dirvish
+command! -nargs=? -complete=dir Sexplore belowright split | silent Dirvish <args> " Replace the netrw commands with dirvish
+command! -nargs=? -complete=dir Vexplore leftabove vsplit | silent Dirvish <args> " Replace the netrw commands with dirvish
+
+
+" Vim-rooter
+let g:rooter_targets = '*.yaml,*.yml,*.rs,*.java'
+let g:rooter_patterns = ['=package.json']
 
 " ================================================================================================
 " }}}
@@ -347,7 +389,7 @@ nnoremap <C-K> <C-W>k
 nnoremap <C-L> <C-W>l
 
 " Making new Splits
-nnoremap <M-n> <C-W><C-N>
+nnoremap <M-n> <C-W><C-S>
 nnoremap <M-m> <C-W><C-V>
 
 " Max out splits
@@ -390,22 +432,31 @@ vnoremap k gk
 nnoremap <M-j> i<CR><ESC>
 nnoremap <M-k> i<CR><ESC>"-ddk"-P
 
+inoremap jj <ESC>ji
+inoremap kk <ESC>ki
+
 " FZF hotkeys
 nnoremap <leader>f :Files<CR>
 nnoremap <leader>b :Buffers<CR>
+nnoremap <leader>r :Rg<CR>
+nnoremap <leader>l :BLines!<CR>
+nnoremap <leader>h :History<CR>
+nnoremap <leader>c :History:<CR>
 
 " Handy stuff
 nnoremap <leader>w :w<CR>
 nnoremap <leader>q :q<CR>
 nnoremap E $
 vnoremap E $
+nnoremap <leader>e :Dirvish<CR>
+nnoremap <leader>d :Dirvish %<CR>
 
 " Magic seraching by default
 nnoremap / /\v
 vnoremap / /\v
 nnoremap ? ?\v
 vnoremap ? ?\v
-cnoremap %s/ %sm/
+cnoremap %s/ %s/\v
 
 " mapping for Rg
 nnoremap <leader>rg :Rg<CR>
@@ -445,12 +496,16 @@ vnoremap <leader>s} <esc>`<i{<esc>`>la}<esc>
 " Auto Commands {{{
 " ================================================================================================
 
+" I want to load indent and plugin settings for filetypes
+filetype plugin on 
+
 " manual folds for vim files
 augroup vimrc
-autocmd!
-au BufAdd,BufRead .vimrc,init.vim 
-        \ setlocal foldmethod=marker | 
-        \ setlocal foldlevel=0
+        autocmd!
+        au BufAdd,BufRead .vimrc,init.vim 
+                \ setlocal foldmethod=marker | 
+                \ setlocal foldlevel=0
+augroup end
 
 " set tab width for assembly
 augroup assembly
@@ -463,19 +518,35 @@ augroup assembly
 augroup end
 
 " Rainbow brackets stuff
-if s:has_plugin('rainbow_parentheses.vim')
 augroup rainbow_parentheses
         autocmd!
-        au VimEnter,BufAdd,BufNewFile * RainbowParenthesesActivate
-        au VimEnter,BufAdd,BufNewFile * RainbowParenthesesLoadRound
-        au VimEnter,BufAdd,BufNewFile * RainbowParenthesesLoadSquare
-        au VimEnter,BufAdd,BufNewFile * RainbowParenthesesLoadBraces
 augroup end
+
+if s:has_plugin('rainbow_parentheses.vim')
+        autocmd rainbow_parentheses VimEnter * RainbowParenthesesActivate
+        autocmd rainbow_parentheses Syntax   *   RainbowParenthesesLoadRound
+        autocmd rainbow_parentheses Syntax   *   RainbowParenthesesLoadSquare
+        autocmd rainbow_parentheses Syntax   *   RainbowParenthesesLoadBraces
 endif
 
+augroup frontend
+        autocmd!
+        au Filetype css,scss,html,javascript,typescript setlocal tabstop=2
+        au Filetype css,scss,html,javascript,typescript setlocal shiftwidth=2
+        au Filetype css,scss,html,javascript,typescript setlocal tabstop=2
+        au Filetype css,scss,html,javascript,typescript setlocal shiftwidth=2
+        au Filetype css,scss,html                       setlocal colorcolumn=
+        au Filetype css,scss,html,javascript,typescript setlocal expandtab
+augroup end
+
 augroup rust
-autocmd!
-autocmd FileType *.rs setlocal filetype=rust
+        autocmd!
+        autocmd FileType *.rs setlocal filetype=rust
+augroup end
+
+augroup dirvish
+        autocmd!
+        au Filetype dirvish nmap <buffer> gu <Plug>(dirvish_up)
 augroup end
 
 " ================================================================================================
@@ -486,8 +557,10 @@ augroup end
 " Commands {{{
 " ================================================================================================
 
-
+command! -nargs=0 Format call CocAction('format')
 
 " ================================================================================================
 " }}}
 " ================================================================================================
+
+
