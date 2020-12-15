@@ -11,8 +11,8 @@ call plug#begin()
 	Plug 'machakann/vim-highlightedyank'
 	Plug 'andymass/vim-matchup'
 	Plug 'godlygeek/tabular'
-        Plug 'lotabout/skim', { 'dir': '~/.skim', 'do': './install' }
-        Plug 'lotabout/skim.vim'
+        Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+        Plug 'junegunn/fzf.vim'
 	Plug 'airblade/vim-rooter'
 	Plug 'tpope/vim-fugitive', {  'tag': 'v2.3' }
 	Plug 'kshenoy/vim-signature'
@@ -42,13 +42,8 @@ call plug#begin()
 	" =======================================================================
         "                             Language Client {{{
 	" =======================================================================
-	Plug 'autozimu/LanguageClient-neovim', {
-		\ 'do': 'bash install.sh',
-		\ 'branch': 'next'
-		\}
 	Plug 'rust-lang/rust.vim'
 	Plug 'neoclide/coc.nvim', {'branch': 'release'}
-	Plug 'dense-analysis/ale'
 	Plug 'cespare/vim-toml'
 	Plug 'stephpy/vim-yaml'
 	Plug 'dag/vim-fish'
@@ -57,7 +52,7 @@ call plug#begin()
 	" =======================================================================
 	" }}}                              
 	" =======================================================================
-
+        
 call plug#end()
 filetype on
 
@@ -217,16 +212,6 @@ let g:rbpt_colorpairs = [
 
 let g:rbpt_max = 8
 
-" Language Server Stuff
-let g:LanguageClient_serverCommands = {
-	\ 'rust': [ 'rustup', 'run', 'stable', 'rls' ],
-	\ 'python': [ '$HOME/.local/bin/pyls'],
-	\ }
-
-" Automatically start language servers.
-let g:LanguageClient_autoStart=1
-let g:deoplete#enable_at_startup=1
-
 " ==========================
 "         LIGHTLINE
 " ==========================
@@ -243,7 +228,8 @@ let g:lightline = {
 	\     'left': [ [ 'mode', 'paste' ],
 	\             [ 'fugitive', 'git-status', 'filename', 'modified', 'readonly' ] ]
 	\ },
-	\ 'subseparator': { 'left': '>', 'right': '<' },
+	\ 'subseparator': { 'left': '', 'right': '' },
+        \ 'separator': {'left': '', 'right': ''},
         \ 'colorscheme': 'OldHope',
 \ }
 
@@ -268,6 +254,8 @@ endfunction
 " VIM ROOTER and FZF
 " ==========================
 let g:fzf_layout = { 'down': '~20%' }
+set grepprg=rg\ --no-heading\ --vimgrep
+set grepformat=%f:%l:%c:%m
 
 function! s:list_cmd()
   "let base = fnamemodify(expand('%'), ':h:.:S')
@@ -316,6 +304,7 @@ inoremap <silent><expr> <c-space> coc#refresh()
 " inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
 " Or use `complete_info` if your vim support it, like:
 inoremap <expr> <cr> complete_info()["selected"] != "-1" ? "\<C-y>" : "\<C-g>u\<CR>"
+nmap <silent> ga :CocAction<CR>
 nmap <silent> ge <Plug>(coc-diagnostic-prev)
 nmap <silent> gw <Plug>(coc-diagnostic-next)
 nmap <silent> gl <Plug>(coc-diagnostic-info)  
@@ -336,11 +325,6 @@ function! s:show_documentation()
         endif
 endfunction
 
-
-" Disable ALE auto completion
-let g:ale_completion_enabled = 0
-let g:ale_set_highlights = 0
-
 " javascript 
 let g:javascript_plugin_jsdoc = 1
 let g:javascript_plugin_ngdoc = 1
@@ -355,7 +339,7 @@ command! -nargs=? -complete=dir Vexplore leftabove vsplit | silent Dirvish <args
 
 " Vim-rooter
 let g:rooter_targets = '*.yaml,*.yml,*.rs,*.java'
-let g:rooter_patterns = ['=package.json']
+let g:rooter_patterns = ['=package.json', '=Cargo.toml']
 
 " ================================================================================================
 " }}}
@@ -437,8 +421,9 @@ inoremap kk <ESC>ki
 
 " FZF hotkeys
 nnoremap <leader>f :Files<CR>
+nnoremap <leader>F :exe 'Files '.expand('%:h')<CR>
 nnoremap <leader>b :Buffers<CR>
-nnoremap <leader>r :Rg<CR>
+nnoremap <leader>r :Rg!<CR>
 nnoremap <leader>l :BLines!<CR>
 nnoremap <leader>h :History<CR>
 nnoremap <leader>c :History:<CR>
@@ -457,9 +442,6 @@ vnoremap / /\v
 nnoremap ? ?\v
 vnoremap ? ?\v
 cnoremap %s/ %s/\v
-
-" mapping for Rg
-nnoremap <leader>rg :Rg<CR>
 
 " Move a line up or down
 nnoremap - ddgkP
@@ -531,12 +513,12 @@ endif
 
 augroup frontend
         autocmd!
-        au Filetype css,scss,html,javascript,typescript setlocal tabstop=2
-        au Filetype css,scss,html,javascript,typescript setlocal shiftwidth=2
-        au Filetype css,scss,html,javascript,typescript setlocal tabstop=2
-        au Filetype css,scss,html,javascript,typescript setlocal shiftwidth=2
-        au Filetype css,scss,html                       setlocal colorcolumn=
-        au Filetype css,scss,html,javascript,typescript setlocal expandtab
+        au Filetype json,jsonc,css,scss,html,javascript,typescript setlocal tabstop=2
+        au Filetype json,jsonc,css,scss,html,javascript,typescript setlocal shiftwidth=2
+        au Filetype json,jsonc,css,scss,html,javascript,typescript setlocal tabstop=2
+        au Filetype json,jsonc,css,scss,html,javascript,typescript setlocal shiftwidth=2
+        au Filetype json,jsonc,css,scss,html                       setlocal colorcolumn=
+        au Filetype json,jsonc,css,scss,html,javascript,typescript setlocal expandtab
 augroup end
 
 augroup rust

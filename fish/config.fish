@@ -1,5 +1,5 @@
 # set the path to include cargo
-set PATH -g ~/.cargo/bin $PATH
+set -ag fish_user_paths $HOME/.cargo/bin
 
 setenv FZF_DEFAULT_COMMAND 'fd --type file --follow'
 setenv FZF_CTRL_T_COMMAND 'fd --type file --follow'
@@ -30,17 +30,17 @@ end
 
 # Replace ls with exa
 if command -v exa > /dev/null
-	abbr -a l 'exa'
-	abbr -a ls 'exa'
-	abbr -a ll 'exa -l'
+	abbr -a l 'exa -al'
+	abbr -a ls 'exa -al'
+	abbr -a ll 'exa -al'
 	abbr -a lll 'exa -la'
 	abbr -a lr  'exa -R'
-	abbr -a lrt 'exa -R -T'
+	abbr -a lrt 'exa -RT'
 	abbr -a lt  'exa -T'
 else
-	abbr -a l 'ls'
-	abbr -a ll 'ls -l'
-	abbr -a lll 'ls -la'
+	abbr -a l 'ls -Al'
+	abbr -a ll 'ls -Al'
+	abbr -a lll 'ls -lA'
 end
 
 # Fish git prompt
