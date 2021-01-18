@@ -1,0 +1,29 @@
+[user]
+	email = ben.mayoras@gmail.com
+	name = Ben Mayoras
+[core]
+	autocrlf = input
+[alias]
+	last = log --stat -1
+        c = checkout
+        b = branch
+        unstage = restore --staged
+        pullod = pull origin develop
+	pick = cherry-pick
+	df = diff -w --word-diff
+	pop = stash pop
+[credential]
+        helper = store
+
+# From: https://www.grzegorowski.com/using-vim-or-neovim-nvim-as-a-git-mergetool
+# define command which will be used when "nvim" is set as a merge tool
+[mergetool "nvim"]
+        cmd = nvim -d $LOCAL $REMOTE $MERGED -c '$wincmd w' -c 'wincmd J'
+
+# set "nvim" as tool for merging
+[merge]
+        tool = nvim
+
+# automatically launch merge tool without displaying a prompt
+[mergetool]
+        prompt = false

@@ -52,6 +52,14 @@ call plug#begin()
 	" =======================================================================
 	" }}}                              
 	" =======================================================================
+
+	" =======================================================================
+        "                             Misc {{{
+	" =======================================================================
+        " Plug 'arzg/vim-rust-syntax-ext'
+	" =======================================================================
+	" }}}                              
+	" =======================================================================
         
 call plug#end()
 filetype on
@@ -304,17 +312,24 @@ inoremap <silent><expr> <c-space> coc#refresh()
 " inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
 " Or use `complete_info` if your vim support it, like:
 inoremap <expr> <cr> complete_info()["selected"] != "-1" ? "\<C-y>" : "\<C-g>u\<CR>"
-nmap <silent> ga :CocAction<CR>
+nmap <silent> <leader>a :CocAction<CR>
+vmap <silent> ga <Plug>(coc-codeaction-selected)
+nmap <silent> ga <Plug>(coc-codeaction-selected)W
 nmap <silent> ge <Plug>(coc-diagnostic-prev)
 nmap <silent> gw <Plug>(coc-diagnostic-next)
 nmap <silent> gl <Plug>(coc-diagnostic-info)  
 nmap <silent> gy <Plug>(coc-type-definition)
 nmap <silent> gi <Plug>(coc-implementation)
-nmap <silent> gr <Plug>(coc-references)
+nmap <silent> gu <Plug>(coc-references)
+nmap <silent> gr <Plug(coc-rename)
 nmap <silent> gd <Plug>(coc-definition)
 nmap <silent> gc <Plug>(coc-refactor)
 nmap <silent> gf :<C-u>CocFix<CR>
 nmap <silent> <F2> <Plug>(coc-rename)
+
+" navigate problems
+nmap <silent> gj <Plug>(coc-diagnostic-next)
+nmap <silent> gk <Plug>(coc-diagnostic-prev)
 
 nnoremap <silent> K :call <SID>show_documentation()<CR>
 function! s:show_documentation() 
@@ -526,6 +541,11 @@ augroup rust
         autocmd FileType *.rs setlocal filetype=rust
 augroup end
 
+augroup markdown
+        autocmd!
+        set colorcolumn=80
+augroup end
+
 augroup dirvish
         autocmd!
         au Filetype dirvish nmap <buffer> gu <Plug>(dirvish_up)
@@ -541,8 +561,11 @@ augroup end
 
 command! -nargs=0 Format call CocAction('format')
 
+" Use Next and Prev to navigate problems
+command! -nargs=0 DNext :call CocAction('diagnosticNext')<CR>
+command! -nargs=0 DPrev :call CocAction('diagnosticPrevious')<CR>
+
+
 " ================================================================================================
 " }}}
 " ================================================================================================
-
-
