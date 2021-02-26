@@ -3,6 +3,7 @@
 	name = Ben Mayoras
 [core]
 	autocrlf = input
+	editor = nvim
 [alias]
 	last = log --stat -1
         c = checkout
@@ -12,6 +13,8 @@
 	pick = cherry-pick
 	df = diff -w --word-diff
 	pop = stash pop
+	amend = commit --amend
+
 [credential]
         helper = store
 
