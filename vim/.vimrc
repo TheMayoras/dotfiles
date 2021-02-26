@@ -22,6 +22,7 @@ call plug#begin()
         Plug 'justinmk/vim-dirvish'
         Plug 'kien/rainbow_parentheses.vim'  
         Plug 'tpope/vim-obsession'
+        Plug 'ryanoasis/vim-devicons'
 	" =======================================================================
 	" }}}                              
 	" =======================================================================
@@ -199,8 +200,10 @@ colorscheme base16-blueish
 " ================================================================================================
 " Plugin Settings {{{
 " ================================================================================================
-
-" Rainbow bracket colors
+"
+" ================================================================================================
+" Rainbow Brackets {{{
+" ================================================================================================
 let g:rbpt_colorpairs = [
     \ ['Darkblue',    'SeaGreen3'],
     \ ['darkgray',    'DarkOrchid3'],
@@ -220,9 +223,13 @@ let g:rbpt_colorpairs = [
 
 let g:rbpt_max = 8
 
-" ==========================
-"         LIGHTLINE
-" ==========================
+" ================================================================================================
+" }}}
+" ================================================================================================
+
+" ================================================================================================
+" Lightline {{{
+" ================================================================================================
 let g:lightline = {
 	\ 'component': {
 	\   'lineinfo': ' %3l:%-2v',
@@ -249,18 +256,22 @@ endfunction
 function! LightlineFugitive()
 	if exists('*fugitive#head()')
 		let branch = fugitive#head()
-		return branch !=# '🚆' ? ''.branch : ''
+		return branch !=# '🚆' ? ' '.branch : ''
 	endif
 	return ''
 endfunction
 
 function! LightlineFilename()
-	return expand('%:t') !=# '' ? @% : '[NoName]'
+	return expand('%:t') !=# '' ? WebDevIconsGetFileTypeSymbol() . ' ' . @% : '[NoName]'
 endfunction
 
-" ==========================
-" VIM ROOTER and FZF
-" ==========================
+" ================================================================================================
+" }}}
+" ================================================================================================
+
+" ================================================================================================
+" Vim-Rooter & Fzf {{{
+" ================================================================================================
 let g:fzf_layout = { 'down': '~20%' }
 set grepprg=rg\ --no-heading\ --vimgrep
 set grepformat=%f:%l:%c:%m
@@ -283,10 +294,17 @@ command! -bang -nargs=* Rg
   \           : fzf#vim#with_preview('right:50%:hidden', '?'),
   \   <bang>0)
 
+" Vim-rooter
+let g:rooter_targets = '*.yaml,*.yml,*.rs,*.java'
+let g:rooter_patterns = ['=package.json', '=Cargo.toml']
 
-" ========================
-" COMPLETION
-" ========================
+" ================================================================================================
+" }}}
+" ================================================================================================
+
+" ================================================================================================
+" Coc & Completion {{{
+" ================================================================================================
 " Use tab for trigger completion with characters ahead and navigate.
 " Use command ':verbose imap <tab>' to make sure tab is not mapped by other plugin.
 inoremap <silent><expr> <TAB>
@@ -340,21 +358,29 @@ function! s:show_documentation()
         endif
 endfunction
 
-" javascript 
-let g:javascript_plugin_jsdoc = 1
-let g:javascript_plugin_ngdoc = 1
+" ================================================================================================
+" }}}
+" ================================================================================================
 
-" Vim-Dirvish
+" ================================================================================================
+" Coc & Completion {{{
+" ================================================================================================
 let g:dirvish_mode = 2
 let g:loaded_netrwPlugin = 1
 command! -nargs=? -complete=dir Explore Dirvish <args> " Replace the netrw commands with dirvish
 command! -nargs=? -complete=dir Sexplore belowright split | silent Dirvish <args> " Replace the netrw commands with dirvish
 command! -nargs=? -complete=dir Vexplore leftabove vsplit | silent Dirvish <args> " Replace the netrw commands with dirvish
 
+" ================================================================================================
+" }}}
+" ================================================================================================
 
-" Vim-rooter
-let g:rooter_targets = '*.yaml,*.yml,*.rs,*.java'
-let g:rooter_patterns = ['=package.json', '=Cargo.toml']
+
+" javascript 
+let g:javascript_plugin_jsdoc = 1
+let g:javascript_plugin_ngdoc = 1
+let g:javascript_plugin_flow  = 1
+
 
 " ================================================================================================
 " }}}
