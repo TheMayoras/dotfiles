@@ -1,5 +1,8 @@
 # set the path to include cargo
 set -ag fish_user_paths $HOME/.cargo/bin
+set -ag fish_user_paths $HOME/.local/bin
+set -ag fish_user_paths $HOME/.nvm
+set -g  EDITOR nvim
 
 setenv FZF_DEFAULT_COMMAND 'fd --type file --follow'
 setenv FZF_CTRL_T_COMMAND 'fd --type file --follow'
@@ -12,6 +15,9 @@ abbr -a vim 'nvim'
 
 # run last command
 alias !!='commandline -i "$history[1]";history delete --exact --case-sensitive "!!"'
+
+# I want to see colors in less
+alias less='less -r'
 
 # run last command starting with arg
 function h
