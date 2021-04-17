@@ -339,7 +339,7 @@ nmap <silent> gl <Plug>(coc-diagnostic-info)
 nmap <silent> gy <Plug>(coc-type-definition)
 nmap <silent> gi <Plug>(coc-implementation)
 nmap <silent> gu <Plug>(coc-references)
-nmap <silent> gr <Plug(coc-rename)
+nmap <silent> gr <Plug>(coc-rename)
 nmap <silent> gd <Plug>(coc-definition)
 nmap <silent> gc <Plug>(coc-refactor)
 nmap <silent> gf :<C-u>CocFix<CR>
@@ -363,7 +363,7 @@ endfunction
 " ================================================================================================
 
 " ================================================================================================
-" Coc & Completion {{{
+" Dirvish {{{
 " ================================================================================================
 let g:dirvish_mode = 2
 let g:loaded_netrwPlugin = 1
@@ -556,10 +556,13 @@ augroup frontend
         autocmd!
         au Filetype json,jsonc,css,scss,html,javascript,typescript setlocal tabstop=2
         au Filetype json,jsonc,css,scss,html,javascript,typescript setlocal shiftwidth=2
-        au Filetype json,jsonc,css,scss,html,javascript,typescript setlocal tabstop=2
-        au Filetype json,jsonc,css,scss,html,javascript,typescript setlocal shiftwidth=2
         au Filetype json,jsonc,css,scss,html                       setlocal colorcolumn=
         au Filetype json,jsonc,css,scss,html,javascript,typescript setlocal expandtab
+
+        au Filetype typescriptreact setlocal tabstop=2
+        au Filetype typescriptreact setlocal shiftwidth=2
+        au Filetype typescriptreact setlocal colorcolumn=
+        au Filetype typescriptreact setlocal expandtab
 augroup end
 
 augroup rust

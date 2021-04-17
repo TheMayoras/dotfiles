@@ -12,6 +12,7 @@
   "coc.preferences.formatOnSaveFiletypes": [
     "javascript",
     "typescript",
+    "typescriptreact",
     "html",
     "json",
     "jsonc",

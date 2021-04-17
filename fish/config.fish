@@ -19,6 +19,10 @@ alias !!='commandline -i "$history[1]";history delete --exact --case-sensitive "
 # I want to see colors in less
 alias less='less -r'
 
+# I want Python3 damnit
+alias python='python3'
+alias pip='pip3'
+
 # run last command starting with arg
 function h
         # concat all arguments passed 
