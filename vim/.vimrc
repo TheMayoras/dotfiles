@@ -457,8 +457,10 @@ vnoremap k gk
 nnoremap <M-j> i<CR><ESC>
 nnoremap <M-k> i<CR><ESC>"-ddk"-P
 
-inoremap jj <ESC>ji
-inoremap kk <ESC>ki
+inoremap jj <C-O>j
+inoremap kk <C-O>k
+inoremap hh <C-O>h
+inoremap ll <C-O>l
 
 " FZF hotkeys
 nnoremap <leader>f :Files<CR>
