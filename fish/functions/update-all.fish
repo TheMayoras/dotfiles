@@ -20,7 +20,7 @@ function update-all
 
         # upgrade neovim packages
         echo 'Updating Neovim packages'
-        nvim +PlugUpgrade +PlugUpdate +PlugInstall +qall
+        nvim +PlugUpgrade +PlugUpdate +PlugInstall +CocUpdate +qall
 
         # upgrade npm packages
         echo 'Updating NPM packages'
