@@ -8,15 +8,17 @@
 	last = log --stat -1
         c = checkout
         b = branch
-        unstage = restore --staged
+	unstage = restore --staged
         pullod = pull origin develop
 	pick = cherry-pick
 	df = diff -w --word-diff
 	pop = stash pop
 	amend = commit --amend
+	s = status
+	d = diff
 
 [credential]
-        helper = store
+	helper = /mnt/c/Program\\ Files/Git/mingw64/libexec/git-core/git-credential-manager-core.exe
 
 # From: https://www.grzegorowski.com/using-vim-or-neovim-nvim-as-a-git-mergetool
 # define command which will be used when "nvim" is set as a merge tool

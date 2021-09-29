@@ -40,13 +40,13 @@ end
 
 # Replace ls with exa
 if command -v exa > /dev/null
-	abbr -a l 'exa -al'
-	abbr -a ls 'exa -al'
-	abbr -a ll 'exa -al'
-	abbr -a lll 'exa -la'
-	abbr -a lr  'exa -R'
-	abbr -a lrt 'exa -RT'
-	abbr -a lt  'exa -T'
+	abbr -a l 'exa -alF --icons'
+	abbr -a ls 'exa -alF --icons'
+	abbr -a ll 'exa -alF --icons'
+	abbr -a lll 'exa -laF --icons'
+	abbr -a lr  'exa -RF --icons'
+	abbr -a lrt 'exa -RTF --icons'
+	abbr -a lt  'exa -TF --icons'
 else
 	abbr -a l 'ls -Al'
 	abbr -a ll 'ls -Al'

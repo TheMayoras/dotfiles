@@ -50,6 +50,9 @@ call plug#begin()
 	Plug 'dag/vim-fish'
         Plug 'pangloss/vim-javascript'
         Plug 'leafgarland/typescript-vim'
+        Plug 'mxw/vim-jsx'
+        Plug 'peitalin/vim-jsx-typescript'
+        Plug 'HerringtonDarkholme/yats.vim'
 	" =======================================================================
 	" }}}                              
 	" =======================================================================
@@ -548,7 +551,7 @@ augroup rainbow_parentheses
 augroup end
 
 if s:has_plugin('rainbow_parentheses.vim')
-        autocmd rainbow_parentheses VimEnter * RainbowParenthesesActivate
+        autocmd rainbow_parentheses VimEnter *   RainbowParenthesesActivate
         autocmd rainbow_parentheses Syntax   *   RainbowParenthesesLoadRound
         autocmd rainbow_parentheses Syntax   *   RainbowParenthesesLoadSquare
         autocmd rainbow_parentheses Syntax   *   RainbowParenthesesLoadBraces
@@ -580,6 +583,16 @@ augroup end
 augroup dirvish
         autocmd!
         au Filetype dirvish nmap <buffer> gu <Plug>(dirvish_up)
+augroup end
+
+augroup csharp
+        autocmd!
+        au Filetype cs set colorcolumn=60
+        au Filetype cs setlocal tabstop=4
+        au Filetype cs setlocal shiftwidth=4
+        au Filetype cs setlocal colorcolumn=
+        au Filetype cs setlocal expandtab
+
 augroup end
 
 " ================================================================================================
