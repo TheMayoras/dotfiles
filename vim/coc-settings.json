@@ -11,8 +11,10 @@
   "python.jediEnabled": false,
   "coc.preferences.formatOnSaveFiletypes": [
     "javascript",
+    "javascript.jsx",
     "typescript",
     "typescriptreact",
+    "typescript.jsx",
     "html",
     "json",
     "jsonc",

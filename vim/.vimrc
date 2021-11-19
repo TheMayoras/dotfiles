@@ -53,6 +53,7 @@ call plug#begin()
         Plug 'mxw/vim-jsx'
         Plug 'peitalin/vim-jsx-typescript'
         Plug 'HerringtonDarkholme/yats.vim'
+        Plug 'OmniSharp/omnisharp-vim'
 	" =======================================================================
 	" }}}                              
 	" =======================================================================
@@ -416,6 +417,13 @@ nnoremap <C-J> <C-W>j
 nnoremap <C-K> <C-W>k
 nnoremap <C-L> <C-W>l
 
+" ========================
+" Tab control
+" ========================
+nnoremap <silent> <C-T>n gt
+nnoremap <silent> <C-T>p gT
+nnoremap <silent> <C-T>c :tabnew<CR>
+
 " Making new Splits
 nnoremap <M-n> <C-W><C-S>
 nnoremap <M-m> <C-W><C-V>
@@ -462,8 +470,6 @@ nnoremap <M-k> i<CR><ESC>"-ddk"-P
 
 inoremap jj <C-O>j
 inoremap kk <C-O>k
-inoremap hh <C-O>h
-inoremap ll <C-O>l
 
 " FZF hotkeys
 nnoremap <leader>f :Files<CR>
@@ -488,12 +494,6 @@ vnoremap / /\v
 nnoremap ? ?\v
 vnoremap ? ?\v
 cnoremap %s/ %s/\v
-
-" Move a line up or down
-nnoremap - ddgkP
-nnoremap _ ddp
-vnoremap - DgkP
-vnoremap _ Dp
 
 " Better uppercase stuff
 inoremap <C-u> <esc>gUiwea
@@ -592,7 +592,14 @@ augroup csharp
         au Filetype cs setlocal shiftwidth=4
         au Filetype cs setlocal colorcolumn=
         au Filetype cs setlocal expandtab
+augroup end
 
+augroup difftool
+        autocmd!
+        au FileWritePre * |
+                if &diff |
+                        nnoremap <silent> <leader>q :qall<CR> |
+                endif
 augroup end
 
 " ================================================================================================
