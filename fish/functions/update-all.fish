@@ -1,10 +1,7 @@
 function update-all
         # cargo upgrade
         echo 'Updating cargo packages'
-        cargo install --list | \
-                awk 'NR%2 == 1 {print $0}' | \
-                cut -d' ' -f1 | \
-                xargs -n 1 cargo install --force
+        cargo-install-update install-update --all
 
         # pip2 upgrade
         echo 'Updating pip2 packages'

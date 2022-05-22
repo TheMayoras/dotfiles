@@ -85,3 +85,7 @@ end
 
 alias config='/usr/bin/git --git-dir=/.cfg/ --work-tree=/home/bmay'
 fish_default_key_bindings
+
+
+# for GUI, execute route.exe in the windows to determine its IP address
+set -x DISPLAY (route.exe print | grep 0.0.0.0 | head -1 | awk '{print $4}'):0.0
