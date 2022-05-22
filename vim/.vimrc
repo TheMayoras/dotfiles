@@ -619,6 +619,12 @@ augroup difftool
                 endif
 augroup end
 
+augroup fish_config
+        autocmd!
+        au BufRead config.fish set foldmethod=marker 
+        au BufRead config.fish set foldmarker={{{,}}}
+augroup end
+
 " ================================================================================================
 " }}}
 " ================================================================================================
