@@ -17,6 +17,9 @@
 	s = status
 	d = diff
 	dt = difftool --minimal --ignore-all-space
+	prev = checkout @{-1}
+	current = rev-parse --abbrev-ref HEAD
+	graph = log --graph
 
 [credential]
 	helper = /mnt/c/Program\\ Files/Git/mingw64/libexec/git-core/git-credential-manager-core.exe

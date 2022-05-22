@@ -23,6 +23,8 @@ call plug#begin()
         Plug 'kien/rainbow_parentheses.vim'  
         Plug 'tpope/vim-obsession'
         Plug 'ryanoasis/vim-devicons'
+        Plug 'kana/vim-textobj-user'
+        Plug 'kana/vim-textobj-entire'
 	" =======================================================================
 	" }}}                              
 	" =======================================================================
@@ -81,6 +83,13 @@ filetype on
 function! s:has_plugin(plugin)
   let lookup = 'g:plugs["' . a:plugin . '"]'
   return exists(lookup)
+endfunction
+
+function! DelSwap()
+  let l:swapfile = undofile(bufname('%'))
+  let l:cmd = 'rm ' . shellescape(l:swapfile)
+  echo 'Running "' . l:cmd . '"'
+  return system(l:cmd)
 endfunction
 
 " ================================================================================================
@@ -418,6 +427,12 @@ nnoremap <C-K> <C-W>k
 nnoremap <C-L> <C-W>l
 
 " ========================
+" Scrolling
+" ========================
+nnoremap <M-h> zh
+nnoremap <M-l> zl
+
+" ========================
 " Tab control
 " ========================
 nnoremap <silent> <C-T>n gt
@@ -577,7 +592,9 @@ augroup end
 
 augroup markdown
         autocmd!
-        set colorcolumn=80
+        autocmd Filetype markdown setlocal colorcolumn=80
+        autocmd Filetype markdown setlocal tabstop=2 shiftwidth=2 expandtab
+        autocmd Filetype markdown setlocal spell
 augroup end
 
 augroup dirvish
@@ -613,9 +630,11 @@ augroup end
 command! -nargs=0 Format call CocAction('format')
 
 " Use Next and Prev to navigate problems
-command! -nargs=0 DNext :call CocAction('diagnosticNext')<CR>
-command! -nargs=0 DPrev :call CocAction('diagnosticPrevious')<CR>
+command! -nargs=0 DNext :call CocAction('diagnosticNext')
+command! -nargs=0 DPrev :call CocAction('diagnosticPrevious')
 
+" Delete swap file (good if corrupted)
+command! -nargs=0 DelSwap :call DelSwap()
 
 " ================================================================================================
 " }}}
