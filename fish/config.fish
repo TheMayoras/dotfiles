@@ -3,6 +3,8 @@ set -ag fish_user_paths $HOME/.cargo/bin
 set -ag fish_user_paths $HOME/.local/bin
 set -ag fish_user_paths $HOME/.nvm
 set -g  EDITOR nvim
+set -gx VOLTA_HOME "$HOME/.volta"
+set -gx PATH "$VOLTA_HOME/bin" $PATH
 # }}}
 
 # FZF {{{
@@ -28,18 +30,18 @@ alias less='less -r'
 
 # I want Python3 damnit
 alias python='python3'
-alias pip='pip3'
-
+alias pip='python3 -m pip'
+alias pip3='python3 -m pip'
 
 # Replace ls with exa
 if command -v exa > /dev/null
-	abbr -a l 'exa -alF --icons'
-	abbr -a ls 'exa -alF --icons'
-	abbr -a ll 'exa -alF --icons'
-	abbr -a lll 'exa -laF --icons'
-	abbr -a lr  'exa -RF --icons'
-	abbr -a lrt 'exa -RTF --icons'
-	abbr -a lt  'exa -TF --icons'
+	abbr -a l 'exa -alF --icons --group-directories-first --git'
+	abbr -a ls 'exa -alF --icons --group-directories-first --git'
+	abbr -a ll 'exa -alF --icons --group-directories-first --git'
+	abbr -a lll 'exa -laF --icons --group-directories-first --git'
+	abbr -a lr  'exa -RF --icons --group-directories-first --git'
+	abbr -a lrt 'exa -RTF --icons --group-directories-first --git'
+	abbr -a lt  'exa -TF --icons --group-directories-first --git'
 else
 	abbr -a l 'ls -Al'
 	abbr -a ll 'ls -Al'
@@ -48,34 +50,13 @@ end
 
 # }}}
 
-# PROMPT {{{
+# Prompt {{{
 # Fish git prompt
 set __fish_git_prompt_showuntrackedfiles 'yes'
 set __fish_git_prompt_showdirtystate 'yes'
 set __fish_git_prompt_showstashstate ''
 set __fish_git_prompt_showupstream 'auto'
 set -g fish_prompt_pwd_dir_length 3
-
-function fish_prompt
-	set_color blue
-	echo -ns $USER 
-	if [ $PWD != $HOME ]
-		set_color brblack
-		echo -n ':'
-		set_color yellow
-		set PAR_DIR (dirname $PWD)
-		echo -n -s (basename $PAR_DIR) / (basename $PWD)
-        else
-                set_color yellow
-                echo -ns ':~'
-	end
-	set_color green
-	printf '%s ' (__fish_git_prompt)
-	set_color blue
-	echo -n '>> '
-	set_color normal
-end
-
 
 function fish_greeting
 	set_color green
@@ -97,5 +78,3 @@ fish_default_key_bindings
 set -gx DISPLAY (route.exe print | grep 0.0.0.0 | head -1 | awk '{print $4}'):0.0
 
 # }}}
-
-

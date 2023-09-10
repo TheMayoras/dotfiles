@@ -25,6 +25,8 @@ call plug#begin()
         Plug 'ryanoasis/vim-devicons'
         Plug 'kana/vim-textobj-user'
         Plug 'kana/vim-textobj-entire'
+        Plug 'tpope/vim-surround'
+        Plug 'junegunn/vim-easy-align'
 	" =======================================================================
 	" }}}                              
 	" =======================================================================
@@ -32,12 +34,13 @@ call plug#begin()
 	" =======================================================================
 	"                                Color Schemes {{{
 	" =======================================================================
-	Plug 'nightsense/vimspectr'
 	Plug 'drewtempelmeyer/palenight.vim'
         Plug 'limadm/vim-blues'
         Plug 'tjammer/blayu.vim'
         Plug 'petelewis/vim-evolution'
         Plug 'reedes/vim-colors-pencil'
+        Plug 'sainnhe/sonokai'
+        Plug 'joshdick/onedark.vim'
 	" =======================================================================
 	" }}}                              
 	" =======================================================================
@@ -56,6 +59,7 @@ call plug#begin()
         Plug 'peitalin/vim-jsx-typescript'
         Plug 'HerringtonDarkholme/yats.vim'
         Plug 'OmniSharp/omnisharp-vim'
+        Plug 'hashivim/vim-terraform'
 	" =======================================================================
 	" }}}                              
 	" =======================================================================
@@ -157,6 +161,20 @@ set noshowmode
 " netrw tree mode
 let g:netrw_liststyle= 3
 
+" This enables native clipboard access for neovim from wsl
+let g:clipboard = {
+          \   'name': 'win32yank-wsl',
+          \   'copy': {
+          \      '+': 'win32yank.exe -i --crlf',
+          \      '*': 'win32yank.exe -i --crlf',
+          \    },
+          \   'paste': {
+          \      '+': 'win32yank.exe -o --lf',
+          \      '*': 'win32yank.exe -o --lf',
+          \   },
+          \   'cache_enabled': 0,
+          \ }
+
 " ================================================================================================
 " }}}
 " ================================================================================================
@@ -194,18 +212,6 @@ let g:secure_modelines_allowed_items = [
 " Colorscheme {{{
 " ================================================================================================
 colorscheme base16-blueish
-" if s:has_plugin('vim-colors-pencil')
-"         colorscheme pencil
-" elseif s:has_plugin('vim-blues')
-"         colorscheme blues
-" elseif s:has_plugin('palenight.vim')
-" 	colorscheme palenight
-" elseif s:has_plugin('vimspectr')
-" 	colorscheme vimspectr210-dark
-" else
-"         colorscheme desert
-" endif
-
 " ================================================================================================
 " }}}
 " ================================================================================================
@@ -213,10 +219,10 @@ colorscheme base16-blueish
 " ================================================================================================
 " Plugin Settings {{{
 " ================================================================================================
-"
-" ================================================================================================
+" typescript-vim {{{
+let g:typescript_indent_disable = 1
+" }}}
 " Rainbow Brackets {{{
-" ================================================================================================
 let g:rbpt_colorpairs = [
     \ ['Darkblue',    'SeaGreen3'],
     \ ['darkgray',    'DarkOrchid3'],
@@ -236,13 +242,8 @@ let g:rbpt_colorpairs = [
 
 let g:rbpt_max = 8
 
-" ================================================================================================
 " }}}
-" ================================================================================================
-
-" ================================================================================================
 " Lightline {{{
-" ================================================================================================
 let g:lightline = {
 	\ 'component': {
 	\   'lineinfo': ' %3l:%-2v',
@@ -251,14 +252,18 @@ let g:lightline = {
 	\   'readonly': 'LightlineReadonly',
 	\   'filename': 'LightlineFilename',
 	\   'fugitive': 'LightlineFugitive',
+        \   'obsession': 'ObsessionStatus',
 	\ },
 	\ 'active': {
 	\     'left': [ [ 'mode', 'paste' ],
-	\             [ 'fugitive', 'git-status', 'filename', 'modified', 'readonly' ] ]
+	\             [ 'fugitive', 'git-status', 'filename', 'modified', 'readonly' ] ],
+        \     'right': [ [ 'lineinfo' ],
+        \             [ 'percent' ],
+        \             [ 'obsession', 'fileformat', 'fileencoding', 'filetype' ] ] 
 	\ },
 	\ 'subseparator': { 'left': '', 'right': '' },
         \ 'separator': {'left': '', 'right': ''},
-        \ 'colorscheme': 'OldHope',
+        \ 'colorscheme': 'onedark',
 \ }
 
 
@@ -278,11 +283,7 @@ function! LightlineFilename()
 	return expand('%:t') !=# '' ? WebDevIconsGetFileTypeSymbol() . ' ' . @% : '[NoName]'
 endfunction
 
-" ================================================================================================
 " }}}
-" ================================================================================================
-
-" ================================================================================================
 " Vim-Rooter & Fzf {{{
 " ================================================================================================
 let g:fzf_layout = { 'down': '~20%' }
@@ -307,42 +308,51 @@ command! -bang -nargs=* Rg
   \           : fzf#vim#with_preview('right:50%:hidden', '?'),
   \   <bang>0)
 
-" Vim-rooter
-let g:rooter_targets = '*.yaml,*.yml,*.rs,*.java'
-let g:rooter_patterns = ['=package.json', '=Cargo.toml']
-
 " ================================================================================================
 " }}}
-" ================================================================================================
-
-" ================================================================================================
 " Coc & Completion {{{
 " ================================================================================================
-" Use tab for trigger completion with characters ahead and navigate.
-" Use command ':verbose imap <tab>' to make sure tab is not mapped by other plugin.
-inoremap <silent><expr> <TAB>
-      \ pumvisible() ? "\<C-n>" :
-      \ <SID>check_back_space() ? "\<TAB>" :
-      \ coc#refresh()
 
-inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+let g:coc_global_extensions = [ 
+        \ 'coc-angular',
+        \ 'coc-css',
+        \ 'coc-eslint',
+        \ 'coc-html',
+        \ 'coc-json',
+        \ 'coc-markdown-preview-enhanced',
+        \ 'coc-omnisharp',
+        \ 'coc-postfix',
+        \ 'coc-prettier',
+        \ 'coc-pyright',
+        \ 'coc-rust-analyzer',
+        \ 'coc-sql',
+        \ 'coc-styled-components',
+        \ 'coc-toml',
+        \ 'coc-tsserver',
+        \ 'coc-webview',
+        \ 'coc-xml' 
+\ ]
 
 function! s:check_back_space() abort
-  let col = col('.') - 1
-  return !col || getline('.')[col - 1]  =~# '\s'
+        let col = col('.') - 1
+        return !col || getline('.')[col - 1]  =~ '\s'
 endfunction
 
-" Use <c-.> to trigger completion.
-inoremap <silent><expr> <c-.> coc#refresh()
+" Insert <tab> when previous text is space, refresh completion if not.
+inoremap <silent><expr> <TAB>
+        \ coc#pum#visible() ? coc#pum#next(1):
+        \ <SID>check_back_space() ? "\<Tab>" :
+        \ coc#refresh()
+inoremap <expr><S-TAB> coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"
 
-" Use <c-space> to trigger completion.
-inoremap <silent><expr> <c-space> coc#refresh()
+if has('nvim')
+        inoremap <silent><expr> <c-space> coc#refresh()
+else
+        inoremap <silent><expr> <c-@> coc#refresh()
+endif
 
-" Use <cr> to confirm completion, `<C-g>u` means break undo chain at current position.
-" Coc only does snippet and additional edit on confirm.
-" inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
-" Or use `complete_info` if your vim support it, like:
-inoremap <expr> <cr> complete_info()["selected"] != "-1" ? "\<C-y>" : "\<C-g>u\<CR>"
+inoremap <expr> <cr> coc#pum#visible() ? coc#_select_confirm() : "\<CR>"
+
 nmap <silent> <leader>a :CocAction<CR>
 vmap <silent> ga <Plug>(coc-codeaction-selected)
 nmap <silent> ga <Plug>(coc-codeaction-selected)W
@@ -373,28 +383,18 @@ endfunction
 
 " ================================================================================================
 " }}}
-" ================================================================================================
-
-" ================================================================================================
 " Dirvish {{{
-" ================================================================================================
 let g:dirvish_mode = 2
 let g:loaded_netrwPlugin = 1
 command! -nargs=? -complete=dir Explore Dirvish <args> " Replace the netrw commands with dirvish
 command! -nargs=? -complete=dir Sexplore belowright split | silent Dirvish <args> " Replace the netrw commands with dirvish
 command! -nargs=? -complete=dir Vexplore leftabove vsplit | silent Dirvish <args> " Replace the netrw commands with dirvish
-
-" ================================================================================================
 " }}}
-" ================================================================================================
-
-
-" javascript 
+" Javascript {{{
 let g:javascript_plugin_jsdoc = 1
 let g:javascript_plugin_ngdoc = 1
 let g:javascript_plugin_flow  = 1
-
-
+" }}}
 " ================================================================================================
 " }}}
 " ================================================================================================
@@ -431,13 +431,6 @@ nnoremap <C-L> <C-W>l
 " ========================
 nnoremap <M-h> zh
 nnoremap <M-l> zl
-
-" ========================
-" Tab control
-" ========================
-nnoremap <silent> <C-T>n gt
-nnoremap <silent> <C-T>p gT
-nnoremap <silent> <C-T>c :tabnew<CR>
 
 " Making new Splits
 nnoremap <M-n> <C-W><C-S>
@@ -483,23 +476,18 @@ vnoremap k gk
 nnoremap <M-j> i<CR><ESC>
 nnoremap <M-k> i<CR><ESC>"-ddk"-P
 
-inoremap jj <C-O>j
-inoremap kk <C-O>k
-
 " FZF hotkeys
 nnoremap <leader>f :Files<CR>
 nnoremap <leader>F :exe 'Files '.expand('%:h')<CR>
 nnoremap <leader>b :Buffers<CR>
+nnoremap <leader>B :BLines!<CR>
 nnoremap <leader>r :Rg!<CR>
-nnoremap <leader>l :BLines!<CR>
 nnoremap <leader>h :History<CR>
 nnoremap <leader>c :History:<CR>
 
 " Handy stuff
 nnoremap <leader>w :w<CR>
 nnoremap <leader>q :q<CR>
-nnoremap E $
-vnoremap E $
 nnoremap <leader>e :Dirvish<CR>
 nnoremap <leader>d :Dirvish %<CR>
 
@@ -513,23 +501,7 @@ cnoremap %s/ %s/\v
 " Better uppercase stuff
 inoremap <C-u> <esc>gUiwea
 
-" Motions for inside brackets, parens, etc
-onoremap ( i(
-onoremap ) i(
-onoremap [ i[
-onoremap ] i[
-onoremap { i{
-onoremap } i{
-
-" Surround in stuff
-vnoremap <leader>s" <esc>`<i"<esc>`>la"<esc>
-vnoremap <leader>s' <esc>`<i'<esc>`>la'<esc>
-vnoremap <leader>s( <esc>`<i(<esc>`>la)<esc>
-vnoremap <leader>s) <esc>`<i(<esc>`>la)<esc>
-vnoremap <leader>s[ <esc>`<i[<esc>`>la]<esc>
-vnoremap <leader>s) <esc>`<i[<esc>`>la]<esc>
-vnoremap <leader>s{ <esc>`<i{<esc>`>la}<esc>
-vnoremap <leader>s} <esc>`<i{<esc>`>la}<esc>
+nnoremap <leader>l :set listchars=tab:<->,trail:~,space:·,eol:$,conceal:ᴴ,nbsp:¯ list!<CR>
 
 " ================================================================================================
 " }}}
@@ -574,15 +546,10 @@ endif
 
 augroup frontend
         autocmd!
-        au Filetype json,jsonc,css,scss,html,javascript,typescript setlocal tabstop=2
-        au Filetype json,jsonc,css,scss,html,javascript,typescript setlocal shiftwidth=2
-        au Filetype json,jsonc,css,scss,html                       setlocal colorcolumn=
-        au Filetype json,jsonc,css,scss,html,javascript,typescript setlocal expandtab
-
-        au Filetype typescriptreact setlocal tabstop=2
-        au Filetype typescriptreact setlocal shiftwidth=2
-        au Filetype typescriptreact setlocal colorcolumn=
-        au Filetype typescriptreact setlocal expandtab
+        au Filetype json,jsonc,css,scss,html,javascript,typescript,typescriptreact setlocal tabstop=2
+        au Filetype json,jsonc,css,scss,html,javascript,typescript,typescriptreact setlocal shiftwidth=2
+        au Filetype json,jsonc,css,scss,html                                       setlocal colorcolumn=
+        au Filetype json,jsonc,css,scss,html,javascript,typescript,typescriptreact setlocal expandtab
 augroup end
 
 augroup rust
@@ -624,6 +591,30 @@ augroup fish_config
         au BufRead config.fish set foldmethod=marker 
         au BufRead config.fish set foldmarker={{{,}}}
 augroup end
+
+function g:OnMarkdownBufEnter() 
+        if &ft ==# "markdown"
+                CocCommand markdown-preview-enhanced.openPreview
+        endif
+endfun
+augroup markdown
+        autocmd!
+        au FileType markdown set spell
+        au FileType markdown CocCommand markdown-preview-enhanced.openPreview
+        au BufEnter * call g:OnMarkdownBufEnter()
+augroup end
+
+" augroup wsl_yank
+"         autocmd!
+" augroup end
+" 
+" let s:clip = system(['which', 'clip.exe'])
+" if executable(s:clip)
+"         fun s:copy_to_clip()
+" 
+"         endfun
+"         autocmd wsl_yank TextYankPost * call <SID>copy_to_clip(v:event)
+" endif
 
 " ================================================================================================
 " }}}

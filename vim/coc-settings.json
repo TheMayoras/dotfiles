@@ -4,10 +4,21 @@
       "command": "metals-vim",
       "rootPatterns": ["build.sbt"],
       "filetypes": ["scala", "sbt"]
+    },
+    "terraform": {
+      "command": "terraform-ls",
+      "args": ["serve"],
+      "filetypes": ["terraform", "tf"],
+      "initializationOptions": {},
+      "settings": {}
     }
   },
-  "tsserver.npm": "/home/bmay/.nvm/versions/node/v14.3.0/bin/npm",
+  "tsserver.npm": "/home/bmay/.volta/bin/npm",
+  "npm.binPath": "/home/bmay/.volta/bin/npm",
+  "eslint.packageManager": "npm",
   "tsserver.enableJavascript": true,
+  "tsserver.suggest.completeJSDocs": true,
+  "tsserver.log": "verbose",
   "python.jediEnabled": false,
   "coc.preferences.formatOnSaveFiletypes": [
     "javascript",
